@@ -49,7 +49,7 @@ This app is ideal for use cases involving **logistics coordination, location enf
 ## 📸 Screenshots
 
 ### 🗺️ Geofence Drawing Interface
-![Geofence Drawing](public/screenshots/geofence-draw.png)
+![Geofence Drawing](./screenshots/geofence-draw.png)
 
 Draw circular or polygonal geofences directly on the map using the Google Maps Drawing tools.
 
@@ -70,7 +70,7 @@ Configure geofences that are only active during defined hours of the day. -->
 ---
 
 ### 🚐 Fleet Overview Panel
-![Fleet View](public/screenshots/fleet-overview.png)
+![Fleet View](./screenshots/fleet-overview.png)
 
 View and manage assigned vehicles, zones, and group interactions.
 
