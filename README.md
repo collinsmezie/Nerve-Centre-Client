@@ -46,8 +46,6 @@ This app is ideal for use cases involving **logistics coordination, location enf
 
 ---
 
----
-
 ## 📸 Screenshots
 
 ### 🗺️ Geofence Drawing Interface
@@ -55,14 +53,14 @@ This app is ideal for use cases involving **logistics coordination, location enf
 
 Draw circular or polygonal geofences directly on the map using the Google Maps Drawing tools.
 
----
+<!-- --- -->
 
 <!-- ### 👥 Group Assignment View
 ![Group Assignment](public/screenshots/group-assign.png)
 
 Assign geofences to groups and manage access boundaries for teams or vehicles. -->
 
----
+<!-- --- -->
 
 <!-- ### ⏱️ Special Timed Geofence Configuration
 ![Timed Geofence](public/screenshots/special-timed.png)
