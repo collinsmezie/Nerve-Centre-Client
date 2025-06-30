@@ -62,7 +62,7 @@ Assign geofences to groups and manage access boundaries for teams or vehicles. -
 
 <!-- --- -->
 
-<!-- ### ⏱️ Special Timed Geofence Configuration
+<!-- ### ⏱️ Special Timed Geofence Configurations
 ![Timed Geofence](public/screenshots/special-timed.png)
 
 Configure geofences that are only active during defined hours of the day. -->
