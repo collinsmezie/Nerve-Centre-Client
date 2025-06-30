@@ -46,6 +46,38 @@ This app is ideal for use cases involving **logistics coordination, location enf
 
 ---
 
+---
+
+## 📸 Screenshots
+
+### 🗺️ Geofence Drawing Interface
+![Geofence Drawing](public/screenshots/geofence-draw.png)
+
+Draw circular or polygonal geofences directly on the map using the Google Maps Drawing tools.
+
+---
+
+<!-- ### 👥 Group Assignment View
+![Group Assignment](public/screenshots/group-assign.png)
+
+Assign geofences to groups and manage access boundaries for teams or vehicles. -->
+
+---
+
+<!-- ### ⏱️ Special Timed Geofence Configuration
+![Timed Geofence](public/screenshots/special-timed.png)
+
+Configure geofences that are only active during defined hours of the day. -->
+
+---
+
+### 🚐 Fleet Overview Panel
+![Fleet View](public/screenshots/fleet-overview.png)
+
+View and manage assigned vehicles, zones, and group interactions.
+
+---
+
 ## ⚙️ Getting Started
 
 ```bash
