@@ -1,0 +1,100 @@
+image: node:latest
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Create staging stack
+          script:
+            - pipe: atlassian/aws-sam-deploy:1.5.0
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID_SDLC
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY_SDLC
+                AWS_DEFAULT_REGION: $AWS_REGION
+                S3_BUCKET: $DEPLOY_BUCKET_NAME_SDLC
+                STACK_NAME: $STACK_NAME_SDLC
+                SAM_TEMPLATE: 'app-sam.yml'
+                CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
+                STACK_PARAMETERS: >
+                  [
+                    {
+                      "ParameterKey": "WebsiteBucketName",
+                      "ParameterValue": $WEBSITE_BUCKET_NAME_SDLC
+                    }
+                  ]
+      - step:
+          name: Build
+          script:
+            - npm install --legacy-peer-deps
+            - export VITE_API_URL=$VITE_API_URL_SDLC
+            - export VITE_GOOGLE_MAPS_API_KEY=$VITE_GOOGLE_MAPS_API_KEY_SDLC
+            - npm run build -- --mode staging
+          artifacts:
+            - dist/**
+      - step:
+          name: Deploy to S3
+          script:
+            - pipe: atlassian/aws-s3-deploy:1.1.0
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID_SDLC
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY_SDLC
+                AWS_DEFAULT_REGION: $AWS_REGION
+                S3_BUCKET: $WEBSITE_BUCKET_NAME_SDLC
+                LOCAL_PATH: 'dist'
+      - step:
+          name: Invalidate Cloudfront Cache
+          deployment: staging
+          script:
+            - pipe: atlassian/aws-cloudfront-invalidate:0.6.0
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID_SDLC
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY_SDLC
+                DISTRIBUTION_ID: $DISTRIBUTION_ID_SDLC
+    release/*:
+      - step:
+          name: Create production stack
+          script:
+            - pipe: atlassian/aws-sam-deploy:1.5.0
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: $AWS_REGION
+                S3_BUCKET: $DEPLOY_BUCKET_NAME
+                STACK_NAME: $STACK_NAME
+                SAM_TEMPLATE: 'app-sam.yml'
+                CAPABILITIES: ['CAPABILITY_IAM', 'CAPABILITY_AUTO_EXPAND']
+                STACK_PARAMETERS: >
+                  [
+                    {
+                      "ParameterKey": "WebsiteBucketName",
+                      "ParameterValue": $WEBSITE_BUCKET_NAME
+                    }
+                  ]
+      - step:
+          name: Build
+          script:
+            - npm install --legacy-peer-deps
+            - export VITE_API_URL=$VITE_API_URL
+            - export VITE_GOOGLE_MAPS_API_KEY=$VITE_GOOGLE_MAPS_API_KEY
+            - npm run build -- --mode production
+          artifacts:
+            - dist/**
+      - step:
+          name: Deploy to S3
+          script:
+            - pipe: atlassian/aws-s3-deploy:1.1.0
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: $AWS_REGION
+                S3_BUCKET: $WEBSITE_BUCKET_NAME
+                LOCAL_PATH: 'dist'
+      - step:
+          name: Invalidate Cloudfront Cache
+          deployment: production
+          script:
+            - pipe: atlassian/aws-cloudfront-invalidate:0.6.0
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                DISTRIBUTION_ID: $DISTRIBUTION_ID

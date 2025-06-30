@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Parameters:
+  # Aliases:
+  #   Type: CommaDelimitedList
+  # AcmRef:
+  #   Type: String
+  WebsiteBucketName:
+    Type: String
+
+Resources:
+  CybeleNerveCentreAppWebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref WebsiteBucketName
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+  Distribution:
+    Type: 'AWS::CloudFront::Distribution'
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !GetAtt CybeleNerveCentreAppWebsiteBucket.RegionalDomainName
+            Id: !Ref CybeleNerveCentreAppWebsiteBucket
+            S3OriginConfig:
+              OriginAccessIdentity: ''
+        CustomErrorResponses:
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: /index.html
+        # ViewerCertificate:
+        #   AcmCertificateArn: !Ref AcmRef
+        #   MinimumProtocolVersion: TLSv1.2_2021
+        #   SslSupportMethod: sni-only
+        # Aliases: !Ref Aliases
+        DefaultRootObject: index.html
+        Enabled: true
+        DefaultCacheBehavior:
+          MinTTL: 86400
+          MaxTTL: 31536000
+          ForwardedValues:
+            QueryString: true
+          TargetOriginId: !Ref CybeleNerveCentreAppWebsiteBucket
+          ViewerProtocolPolicy: 'redirect-to-https'
